@@ -1,7 +1,9 @@
 package com.sky.service.impl;
 
 import com.sky.constant.MessageConstant;
+import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
+import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
@@ -11,7 +13,8 @@ import com.sky.mapper.EmployeeMapper;
 import com.sky.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -53,5 +56,25 @@ public class EmployeeServiceImpl implements EmployeeService {
         //3、返回实体对象
         return employee;
     }
+
+
+    public void addEmployee(EmployeeDTO employeeDTO){
+        Employee employee = Employee.builder()
+                .idNumber(employeeDTO.getIdNumber())
+                .name(employeeDTO.getName())
+                .phone(employeeDTO.getPhone())
+                .sex(employeeDTO.getSex())
+                .username(employeeDTO.getUsername()).build();
+
+        employee.setStatus(1);
+        employee.setPassword(PasswordConstant.DEFAULT_PASSWORD);
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+        // TODO
+        employee.setCreateUser(1L);
+        employee.setCreateUser(1L);
+        employeeMapper.insertEmployee(employee);
+    }
+
 
 }
