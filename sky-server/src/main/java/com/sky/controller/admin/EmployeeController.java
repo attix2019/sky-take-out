@@ -75,7 +75,7 @@ public class EmployeeController {
 
     @PostMapping
     @ApiOperation("新增员工")
-    public Result addEmployee(EmployeeDTO employeeDTO){
+    public Result addEmployee(@RequestBody EmployeeDTO employeeDTO){
         employeeService.addEmployee(employeeDTO);
         return Result.success();
     }
