@@ -87,6 +87,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/status/{status}")
+    @ApiOperation("更改员工状态")
     public Result setEmployeeStatus(@PathVariable("status") int status, long id){
         employeeService.updateEployee(status, id);
         return Result.success();
