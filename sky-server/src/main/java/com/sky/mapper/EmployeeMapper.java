@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import org.apache.ibatis.annotations.Mapper;
@@ -26,4 +27,5 @@ public interface EmployeeMapper {
 
     void updateEmployeeById(Employee employee);
 
+    Employee getEmployeeById(int id);
 }

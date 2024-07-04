@@ -33,6 +33,7 @@
         update employee
         <set>
             <if test=" name != null and name != ''"> name=#{name},</if>
+            <if test=" username != null and username != ''"> username=#{username},</if>
             <if test=" password != null and password != ''"> password=#{password},</if>
             <if test=" phone != null and phone != ''"> phone=#{phone},</if>
             <if test=" sex != null and sex != ''"> sex=#{sex},</if>
@@ -43,4 +44,8 @@
         </set>
         where id=#{id}
     </update>
+
+    <select id="getEmployeeById" resultType="Employee">
+        select * from employee where id = #{id}
+    </select>
 </mapper>

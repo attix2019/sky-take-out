@@ -7,6 +7,8 @@ import java.io.Serializable;
 @Data
 public class EmployeeDTO implements Serializable {
 
+    private long id;
+
     private String username;
 
     private String name;
