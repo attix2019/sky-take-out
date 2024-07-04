@@ -9,4 +9,23 @@
         values(#{name},#{username},#{password}, #{phone}, #{sex}, #{idNumber}, #{status}, #{createTime}, #{updateTime},
                #{createUser}, #{updateUser})
     </insert>
+    
+    <select id="findEmployees" resultType="Employee">
+        select * from employee
+        <where>
+            <if test="name != null and name != '' ">
+                name like concat('%', #{name},'%')
+            </if>
+        </where>
+        limit ${(page-1)*pageSize},#{pageSize}
+    </select>
+
+    <select id="countEmployees" resultType="int">
+        select count(*) from employee
+        <where>
+              <if test="name != null and name != '' ">
+                  name like concat('%', #{name},'%')
+              </if>
+        </where>
+    </select>
 </mapper>
