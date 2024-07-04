@@ -24,4 +24,6 @@ public interface EmployeeMapper {
 
     int countEmployees(EmployeePageQueryDTO employeePageQueryDTO);
 
+    void updateEmployeeById(Employee employee);
+
 }

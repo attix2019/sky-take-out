@@ -88,5 +88,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         return pageResult;
     }
 
-
+    @Override
+    public void updateEployee(int status, long id) {
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id).build();
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employee.setUpdateTime(LocalDateTime.now());
+        employeeMapper.updateEmployeeById(employee);
+    }
 }
