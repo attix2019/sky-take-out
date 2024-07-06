@@ -89,4 +89,12 @@ public class DishServiceImpl implements DishService {
         BeanUtils.copyProperties(dishDTO, dish);
         dishMapper.updateDish(dish);
     }
+
+    @Override
+    public void updateDishStatus(long id, int status) {
+        Dish dish = new Dish();
+        dish.setStatus(status);
+        dish.setId(id);
+        dishMapper.updateDish(dish);
+    }
 }
