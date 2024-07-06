@@ -5,6 +5,7 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.SetmealService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,4 +32,16 @@ public class SetmealController {
         PageResult pageResult =  setmealService.findSetmeals(setmealPageQueryDTO);
         return Result.success(pageResult);
     }
+
+    // 修改套餐
+
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("修改套餐起售停售状态")
+    public Result updateSetmealStatus(long id, @PathVariable int status){
+        setmealService.updateSetmealStatus(id, status);
+        return Result.success();
+    }
+
+    // 删除
 }

@@ -9,4 +9,6 @@ public interface SetmealService {
     void addSetmeal(SetmealDTO setmealDTO);
 
     PageResult findSetmeals(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    void updateSetmealStatus(long id, int status);
 }
