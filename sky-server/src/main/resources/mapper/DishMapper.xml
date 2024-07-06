@@ -11,8 +11,8 @@
          #{updateTime}, #{updateUser})
     </insert>
 
-    <select id="findDishes" resultType="com.sky.entity.Dish">
-        select * from dish
+    <select id="findDishes" resultType="com.sky.vo.DishVO">
+        select d.*, c.name as category_name from dish as d left join category as c on  d.category_id=c.id
         <where>
             <if test="name != null and name != ''">
                 and name like concat('%',#{name},'%')

@@ -7,6 +7,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.enumeration.OperationType;
+import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -26,7 +27,7 @@ public interface DishMapper {
     @Autofill(operationType = OperationType.INSERT)
     long insertDish(Dish dish);
 
-    Page<Dish> findDishes(DishPageQueryDTO dishPageQueryDTO);
+    Page<DishVO> findDishes(DishPageQueryDTO dishPageQueryDTO);
 
     void deleteDishes(List<Long> ids);
 
