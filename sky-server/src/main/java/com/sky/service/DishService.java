@@ -17,4 +17,6 @@ public interface DishService {
     void deleteDishes(List<Long> ids);
 
     DishVO findDishById(int id);
+
+    void updateDish(DishDTO dishDTO);
 }

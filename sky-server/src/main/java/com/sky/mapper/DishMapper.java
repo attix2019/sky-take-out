@@ -34,5 +34,7 @@ public interface DishMapper {
 
     Dish findDishById(int id);
 
+    @Autofill(operationType = OperationType.UPDATE)
+    void updateDish(Dish dish);
 
 }

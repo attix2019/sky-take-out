@@ -53,4 +53,11 @@ public class DishController {
         return Result.success(dish);
     }
 
+    @PutMapping
+    @ApiOperation("编辑菜品信息")
+    public Result updateDish(@RequestBody DishDTO dishDTO){
+        dishService.updateDish(dishDTO);
+        return Result.success();
+    }
+
 }
