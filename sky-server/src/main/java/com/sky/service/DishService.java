@@ -4,9 +4,13 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
 
+import java.util.List;
+
 public interface DishService {
 
-    public void addDish(DishDTO dishDTO);
+    void addDish(DishDTO dishDTO);
 
-    public PageResult findDishes(DishPageQueryDTO dishPageQueryDTO);
+    PageResult findDishes(DishPageQueryDTO dishPageQueryDTO);
+
+    void deleteDishes(List<Long> ids);
 }

@@ -29,4 +29,10 @@ public interface DishMapper {
     void insertFlavors(List<DishFlavor> flavors);
 
     Page<Dish> findDishes(DishPageQueryDTO dishPageQueryDTO);
+
+    void deleteDishes(List<Long> ids);
+
+    Integer countActiveDishByIds(List<Long> ids);
+
+    void deleteFlavorsAssociatedWithDish(List<Long> ids);
 }

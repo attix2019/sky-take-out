@@ -34,4 +34,26 @@
         </where>
         order by create_time desc
     </select>
+
+    <select id="countActiveDishByIds" resultType="int">
+        select count(*) from dish where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="dishId">
+            #{dishId}
+        </foreach>
+        and status = 1
+    </select>
+
+    <delete id="deleteDishes">
+        delete from dish where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="dishId">
+            #{dishId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteFlavorsAssociatedWithDish">
+        delete from dish_flavor where dish_id in
+        <foreach collection="ids" open="(" close=")" separator="," item="dishId">
+            #{dishId}
+        </foreach>
+    </delete>
 </mapper>

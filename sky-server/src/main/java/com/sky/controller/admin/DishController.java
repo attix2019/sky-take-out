@@ -10,6 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/admin/dish")
 @Slf4j
@@ -31,4 +35,13 @@ public class DishController {
         PageResult pageResult = dishService.findDishes(dishPageQueryDTO);
         return Result.success(pageResult);
     }
+
+    @DeleteMapping
+    @ApiOperation("删除菜品")
+    public Result deleteDishes(String ids){
+        List<Long> idList = Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
+        dishService.deleteDishes(idList);
+        return Result.success();
+    }
+
 }
