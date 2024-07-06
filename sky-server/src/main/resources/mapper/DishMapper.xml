@@ -11,14 +11,6 @@
          #{updateTime}, #{updateUser})
     </insert>
 
-    <insert id="insertFlavors">
-        insert into  dish_flavor( dish_id, name, value)
-        VALUES
-        <foreach collection="flavors" index="" item="flavor" separator=",">
-            (#{flavor.dishId},#{flavor.name},#{flavor.value})
-        </foreach>
-    </insert>
-
     <select id="findDishes" resultType="com.sky.entity.Dish">
         select * from dish
         <where>
@@ -50,18 +42,9 @@
         </foreach>
     </delete>
 
-    <delete id="deleteFlavorsAssociatedWithDish">
-        delete from dish_flavor where dish_id in
-        <foreach collection="ids" open="(" close=")" separator="," item="dishId">
-            #{dishId}
-        </foreach>
-    </delete>
 
     <select id="findDishById" resultType="Dish">
         select * from dish where id = #{id}
     </select>
 
-    <select id="getFlavorByDishId" resultType="com.sky.entity.DishFlavor">
-        select * from dish_flavor where dish_id = #{id}
-    </select>
 </mapper>
