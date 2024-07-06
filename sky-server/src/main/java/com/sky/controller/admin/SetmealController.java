@@ -12,6 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @Slf4j
 @RequestMapping("/admin/setmeal")
@@ -57,4 +61,11 @@ public class SetmealController {
     }
 
     // 删除
+    @DeleteMapping
+    @ApiOperation("删除套餐")
+    public Result deleteSetmeals(String ids){
+        List<Long> idList = Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
+        setmealService.deleteSetmeals(idList);
+        return Result.success();
+    }
 }

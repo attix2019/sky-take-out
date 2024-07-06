@@ -35,4 +35,8 @@ public interface SetmealMapper {
 
     @Select("select * from setmeal where id = #{id}")
     Setmeal getSetmealById(long id);
+
+    Integer countActiveSetmealByIds(List<Long> idList);
+
+    void deleteSetmeals(List<Long> idList);
 }

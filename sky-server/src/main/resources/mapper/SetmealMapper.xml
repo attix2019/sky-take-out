@@ -48,4 +48,19 @@
         </set>
         where id=#{id}
     </update>
+
+    <select id="countActiveSetmealByIds" resultType="int">
+        select count(*) from setmeal where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="setmealId">
+            #{setmealId}
+        </foreach>
+        and status = 1
+    </select>
+
+    <delete id="deleteSetmeals">
+        delete from setmeal where id in
+        <foreach collection="idList" open="(" close=")" separator="," item="setmealId">
+            #{setmealId}
+        </foreach>
+    </delete>
 </mapper>

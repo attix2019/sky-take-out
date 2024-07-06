@@ -2,10 +2,12 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -74,11 +78,25 @@ public class SetmealServiceImpl implements SetmealService {
         BeanUtils.copyProperties(setmealDTO, setmeal);
         setmealMapper.updateSetmeal(setmeal);
         // 如果菜品发生变化，也要更新菜品
-        setmealDishMapper.deleteDishesBySetmealId(setmeal.getId());
+        setmealDishMapper.deleteDishesBySetmealId(Arrays.asList(setmeal.getId()));
         List<SetmealDish> setmealDishItems = setmealDTO.getSetmealDishes();
         for(SetmealDish setmealDish : setmealDishItems){
             setmealDish.setSetmealId(setmeal.getId());
         }
         setmealDishMapper.insertSetmealDishItem(setmealDishItems);
+    }
+
+    @Override
+    @Transactional
+    public void deleteSetmeals(List<Long> idList) {
+        // 启用中的套餐不能删除
+        int activeSetmealNum = setmealMapper.countActiveSetmealByIds(idList);
+        if(activeSetmealNum != 0){
+            throw new DeletionNotAllowedException(MessageConstant.SETMEAL_ON_SALE);
+        }
+        // 删除套餐表
+        setmealMapper.deleteSetmeals(idList);
+        // 删除完套餐要把setmeal_dish表里的项一起清理了
+        setmealDishMapper.deleteDishesBySetmealId(idList);
     }
 }
