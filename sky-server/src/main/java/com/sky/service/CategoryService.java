@@ -39,4 +39,6 @@ public interface CategoryService {
      * @param id
      */
     void updateCategoryStatus(Integer status, Long id);
+
+    List findActiveCategoriesByType(String type);
 }

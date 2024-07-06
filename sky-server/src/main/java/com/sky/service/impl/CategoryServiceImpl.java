@@ -116,4 +116,9 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.updateCategory(category);
     }
 
+    @Override
+    public List findActiveCategoriesByType(String type) {
+        return categoryMapper.findActiveCategoriesByType(type);
+    }
+
 }

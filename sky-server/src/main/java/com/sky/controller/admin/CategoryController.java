@@ -88,4 +88,13 @@ public class CategoryController {
         categoryService.updateCategoryStatus(status,id);
         return Result.success();
     }
+
+    // 在添加菜品和套餐时使用到这个接口
+    @GetMapping("/list")
+    @ApiOperation("根据类别查询正在启用的菜品")
+    public Result<List> findActiveCategoriesByType(String type){
+       List list =  categoryService.findActiveCategoriesByType(type);
+        return Result.success(list);
+    }
+
 }

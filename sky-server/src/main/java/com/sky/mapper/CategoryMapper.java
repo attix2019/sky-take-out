@@ -30,6 +30,9 @@ public interface CategoryMapper {
      */
     Page<Category> findCategories(CategoryPageQueryDTO categoryPageQueryDTO);
 
+    List findActiveCategoriesByType(String type);
+
+
     /**
      * 根据id删除分类
      * @param id
