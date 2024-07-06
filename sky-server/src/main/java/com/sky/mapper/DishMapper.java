@@ -35,4 +35,10 @@ public interface DishMapper {
     Integer countActiveDishByIds(List<Long> ids);
 
     void deleteFlavorsAssociatedWithDish(List<Long> ids);
+
+    Dish findDishById(int id);
+
+    List<DishFlavor> getFlavorByDishId(int id);
+
+
 }
