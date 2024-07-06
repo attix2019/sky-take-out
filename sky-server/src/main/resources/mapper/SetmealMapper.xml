@@ -18,7 +18,7 @@
     </insert>
 
     <select id="findSetmeals" resultType="com.sky.vo.SetmealVO">
-        select d.*, c.name as category_name from dish as d left join category as c on  d.category_id=c.id
+        select s.*, c.name as category_name from setmeal as s left join category as c on  s.category_id=c.id
         <where>
             <if test="name != null and name != ''">
                 and name like concat('%',#{name},'%')
