@@ -18,4 +18,20 @@
             (#{flavor.dishId},#{flavor.name},#{flavor.value})
         </foreach>
     </insert>
+
+    <select id="findDishes" resultType="com.sky.entity.Dish">
+        select * from dish
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId != null and categoryId != ''">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{type}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
 </mapper>
