@@ -37,4 +37,5 @@ public interface DishMapper {
     @Autofill(operationType = OperationType.UPDATE)
     void updateDish(Dish dish);
 
+    List<Dish> findDishesByCategoryId(int id);
 }

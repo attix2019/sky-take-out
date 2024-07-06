@@ -62,4 +62,8 @@
         </set>
         where id=#{id}
     </update>
+
+    <select id="findDishesByCategoryId" resultType="Dish">
+        select * from dish where status = 1 and category_id =#{categoryId}
+    </select>
 </mapper>

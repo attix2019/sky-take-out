@@ -97,4 +97,9 @@ public class DishServiceImpl implements DishService {
         dish.setId(id);
         dishMapper.updateDish(dish);
     }
+
+    @Override
+    public List<Dish> listDishesByCategory(int categoryId) {
+        return dishMapper.findDishesByCategoryId(categoryId);
+    }
 }

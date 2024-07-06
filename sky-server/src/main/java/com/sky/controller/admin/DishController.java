@@ -7,6 +7,7 @@ import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,4 +67,13 @@ public class DishController {
         dishService.updateDishStatus(id, status);
         return Result.success();
     }
+
+    // 在新建套餐选择菜品时用到
+    @GetMapping("/list")
+    @ApiOperation("根据菜品类别获取在售菜品列表")
+    public Result listDishesByCategory(int categoryId){
+        List<Dish> dishes =  dishService.listDishesByCategory(categoryId);
+        return Result.success(dishes);
+    }
+
 }

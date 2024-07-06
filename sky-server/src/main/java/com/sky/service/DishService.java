@@ -21,4 +21,6 @@ public interface DishService {
     void updateDish(DishDTO dishDTO);
 
     void updateDishStatus(long id, int status);
+
+    List<Dish> listDishesByCategory(int categoryId);
 }
