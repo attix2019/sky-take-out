@@ -10,4 +10,7 @@ public class StatusConstant {
 
     //禁用
     public static final Integer DISABLE = 0;
+
+    // redis当中存放营业状态的key
+    public static final String STATUS_KEY = "status";
 }
