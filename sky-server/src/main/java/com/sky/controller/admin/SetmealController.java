@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @RequestMapping("/admin/setmeal")
+@Api("套餐相关接口")
 public class SetmealController {
 
     @Autowired
