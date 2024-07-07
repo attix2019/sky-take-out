@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -44,6 +45,9 @@ public class DishServiceImpl implements DishService {
         long id = dish.getId();
 
         List<DishFlavor> flvaors  = dishDTO.getFlavors();
+        if(flvaors.size() == 0) {
+            return;
+        }
         for(DishFlavor flavor : flvaors){
             flavor.setDishId(id);
         }
@@ -84,10 +88,20 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    @Transactional
     public void updateDish(DishDTO dishDTO) {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
         dishMapper.updateDish(dish);
+        //如果口味改变，也要更新口味
+        dishFlavorMapper.deleteFlavorsAssociatedWithDish(Arrays.asList(dishDTO.getId()));
+        List<DishFlavor> dishFlavors = dishDTO.getFlavors();
+        if(dishFlavors.size() != 0){
+            for(DishFlavor dishFlavor : dishFlavors){
+                dishFlavor.setDishId(dishDTO.getId());
+            }
+            dishFlavorMapper.insertFlavors(dishDTO.getFlavors());
+        }
     }
 
     @Override
