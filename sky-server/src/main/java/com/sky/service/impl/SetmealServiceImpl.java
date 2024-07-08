@@ -108,8 +108,8 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Override
     @Cacheable(cacheNames = KeyForCacheConstant.SETMEALS_OF_CATEGORY_ID, key = "#categoryId")
-    public List findSetmealsByCategoryId(Integer categoryId) {
-        return setmealMapper.findSetmealsByCategoryID(categoryId);
+    public List findActiveSetmealsByCategoryId(Integer categoryId) {
+        return setmealMapper.findActiveSetmealsByCategoryId(categoryId);
     }
 
     @Override

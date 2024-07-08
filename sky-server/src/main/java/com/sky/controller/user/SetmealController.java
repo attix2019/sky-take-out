@@ -24,10 +24,11 @@ public class SetmealController {
     @GetMapping("/list")
     @ApiOperation("用户端根据分类id获取套餐列表")
     public Result getSetmealsByCategoryId(Integer categoryId){
-        return  Result.success(setmealService.findSetmealsByCategoryId(categoryId));
+        return  Result.success(setmealService.findActiveSetmealsByCategoryId(categoryId));
     }
 
     @GetMapping("/dish/{id}")
+    @ApiOperation("根据套餐id获取套餐详情")
     public Result getSetmealContentById(@PathVariable Integer id){
         return Result.success(setmealService.getSetmealContentById(id));
     }
