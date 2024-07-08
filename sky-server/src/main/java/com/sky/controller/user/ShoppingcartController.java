@@ -27,4 +27,11 @@ public class ShoppingcartController {
     public Result listShoppingCartItems(){
         return  Result.success(shoppingcartService.listShoppingCartItems());
     }
+
+    @DeleteMapping("/clean")
+    @ApiOperation("清空购物车")
+    public Result clearShoppingCart(){
+        shoppingcartService.clearShoppingCart();
+        return Result.success();
+    }
 }
