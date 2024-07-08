@@ -22,6 +22,6 @@ public class DishController {
     @GetMapping("/list")
     @ApiOperation("用户端根据类别获取菜品列表")
     public Result getDishesByCategory(Integer categoryId){
-        return Result.success(dishService.listDishesByCategory(categoryId));
+        return Result.success(dishService.listDishesWithFlavorsByCategory(categoryId));
     }
 }

@@ -33,7 +33,7 @@ public interface DishMapper {
 
     Integer countActiveDishByIds(List<Long> ids);
 
-    Dish findDishById(int id);
+    Dish findDishById(long id);
 
     @Autofill(operationType = OperationType.UPDATE)
     void updateDish(Dish dish);

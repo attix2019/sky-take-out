@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -82,7 +83,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public DishVO findDishById(int id) {
+    public DishVO findDishById(long id) {
         Dish dish = dishMapper.findDishById(id);
         DishVO dishVO = new DishVO();
         BeanUtils.copyProperties(dish, dishVO);
@@ -123,5 +124,20 @@ public class DishServiceImpl implements DishService {
     @Cacheable(cacheNames = KeyForCacheConstant.DISHES_OF_CATEGORY_ID, key = "#categoryId")
     public List<Dish> listDishesByCategory(int categoryId) {
         return dishMapper.findDishesByCategoryId(categoryId);
+    }
+
+    @Override
+    @Cacheable(cacheNames = KeyForCacheConstant.DISHES_OF_CATEGORY_ID, key = "#categoryId")
+    public List<DishVO> listDishesWithFlavorsByCategory(int categoryId) {
+        List<Dish> dishWithoutFlavors = dishMapper.findDishesByCategoryId(categoryId);
+        List<DishVO> dishWithFlavors = new LinkedList<>();
+        for(Dish dish : dishWithoutFlavors){
+            DishVO dishVO = new DishVO();
+            List<DishFlavor> dishFlavors =  dishFlavorMapper.getFlavorByDishId(dish.getId());
+            BeanUtils.copyProperties(dish, dishVO);
+            dishVO.setFlavors(dishFlavors);
+            dishWithFlavors.add(dishVO);
+        }
+        return dishWithFlavors;
     }
 }

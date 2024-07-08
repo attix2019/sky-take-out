@@ -50,7 +50,7 @@ public class DishController {
 
     @GetMapping("/{id}")
     @ApiOperation("根据id查询菜品")
-    public Result findDishById(@PathVariable int id){
+    public Result findDishById(@PathVariable long id){
         DishVO dish = dishService.findDishById(id);
         return Result.success(dish);
     }
