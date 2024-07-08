@@ -99,4 +99,9 @@ public class SetmealServiceImpl implements SetmealService {
         // 删除完套餐要把setmeal_dish表里的项一起清理了
         setmealDishMapper.deleteDishesBySetmealId(idList);
     }
+
+    @Override
+    public List findSetmealsByCategoryId(Integer categoryId) {
+        return setmealMapper.findSetmealsByCategoryID(categoryId);
+    }
 }

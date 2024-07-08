@@ -39,4 +39,7 @@ public interface SetmealMapper {
     Integer countActiveSetmealByIds(List<Long> idList);
 
     void deleteSetmeals(List<Long> idList);
+
+    @Select("select * from setmeal where category_id = #{categoryId}")
+    List<Setmeal> findSetmealsByCategoryID(Integer categoryId);
 }

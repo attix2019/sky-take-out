@@ -1,7 +1,7 @@
 package com.sky.controller.user;
 
 import com.sky.result.Result;
-import com.sky.service.DishService;
+import com.sky.service.SetmealService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("userDishController")
+@RequestMapping("/user/setmeal")
+@RestController("userSetmealController")
 @Slf4j
-@Api(tags = "用户端菜品相关接口")
-@RequestMapping("/user/dish")
-public class DishController {
+@Api("用户端套餐相关接口")
+public class SetmealController {
 
     @Autowired
-    DishService dishService;
+    SetmealService setmealService;
 
     @GetMapping("/list")
-    @ApiOperation("用户端根据类别获取菜品列表")
-    public Result getDishesByCategory(Integer categoryId){
-        return Result.success(dishService.listDishesByCategory(categoryId));
+    @ApiOperation("用户端根据分类id获取套餐列表")
+    public Result getSetmealsByCategoryId(Integer categoryId){
+        return  Result.success(setmealService.findSetmealsByCategoryId(categoryId));
     }
 }

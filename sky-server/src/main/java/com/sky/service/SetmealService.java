@@ -20,4 +20,6 @@ public interface SetmealService {
     void updateSetmeal(SetmealDTO setmealDTO);
 
     void deleteSetmeals(List<Long> idList);
+
+    List findSetmealsByCategoryId(Integer categoryId);
 }
