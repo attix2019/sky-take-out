@@ -2,6 +2,7 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.KeyForCacheConstant;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
@@ -17,6 +18,8 @@ import com.sky.vo.DishVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +41,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = KeyForCacheConstant.DISHES_OF_CATEGORY_ID, key="#dishDTO.categoryId")
     public void addDish(DishDTO dishDTO) {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
@@ -63,6 +67,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = KeyForCacheConstant.DISHES_OF_CATEGORY_ID, allEntries = true)
     public void deleteDishes(List<Long> ids) {
         int activeDishesInIds = dishMapper.countActiveDishByIds(ids);
         if( activeDishesInIds != 0){
@@ -89,6 +94,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = KeyForCacheConstant.DISHES_OF_CATEGORY_ID, allEntries = true)
     public void updateDish(DishDTO dishDTO) {
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
@@ -105,6 +111,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    @CacheEvict(cacheNames = KeyForCacheConstant.DISHES_OF_CATEGORY_ID,  allEntries = true)
     public void updateDishStatus(long id, int status) {
         Dish dish = new Dish();
         dish.setStatus(status);
@@ -113,6 +120,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
+    @Cacheable(cacheNames = KeyForCacheConstant.DISHES_OF_CATEGORY_ID, key = "#categoryId")
     public List<Dish> listDishesByCategory(int categoryId) {
         return dishMapper.findDishesByCategoryId(categoryId);
     }
