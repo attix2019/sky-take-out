@@ -22,4 +22,6 @@ public interface SetmealService {
     void deleteSetmeals(List<Long> idList);
 
     List findSetmealsByCategoryId(Integer categoryId);
+
+    List getSetmealContentById(Integer id);
 }

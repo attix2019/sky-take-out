@@ -104,4 +104,9 @@ public class SetmealServiceImpl implements SetmealService {
     public List findSetmealsByCategoryId(Integer categoryId) {
         return setmealMapper.findSetmealsByCategoryID(categoryId);
     }
+
+    @Override
+    public List getSetmealContentById(Integer id) {
+        return setmealDishMapper.findSetmealDishesBySetmealId(id);
+    }
 }
