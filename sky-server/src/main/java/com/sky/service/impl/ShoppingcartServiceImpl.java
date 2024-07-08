@@ -39,7 +39,7 @@ public class ShoppingcartServiceImpl implements ShoppingcartService {
             // 更新数量 +1
             int nums = existingItem.getNumber() + 1;
             existingItem.setNumber(nums);
-            shoppingCartMapper.updateItem(existingItem);
+            shoppingCartMapper.updateExistingItem(existingItem);
         }else{
             // 额外插入  name, image, number, amount, createtime
             if(shoppingCartDTO.getDishId() != null){
@@ -68,5 +68,26 @@ public class ShoppingcartServiceImpl implements ShoppingcartService {
     @Override
     public void clearShoppingCart() {
         shoppingCartMapper.clearShoppingCart(BaseContext.getCurrentId());
+    }
+
+    @Override
+    public void deductShoppingcartItemQuantity(ShoppingCartDTO shoppingCartDTO) {
+        ShoppingCartItem existingItem = getExistingItem(shoppingCartDTO);
+
+        int nums = existingItem.getNumber() - 1;
+        if(nums == 0){
+            shoppingCartMapper.deleteItem(existingItem);
+        }else if(nums > 0){
+            existingItem.setNumber(nums);
+            shoppingCartMapper.updateExistingItem(existingItem);
+        }
+    }
+
+    private ShoppingCartItem getExistingItem(ShoppingCartDTO shoppingCartDTO){
+        ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+        BeanUtils.copyProperties(shoppingCartDTO, shoppingCartItem);
+        shoppingCartItem.setUserId(BaseContext.getCurrentId());
+        ShoppingCartItem existingItem = shoppingCartMapper.getExistingItem(shoppingCartItem);
+        return existingItem;
     }
 }

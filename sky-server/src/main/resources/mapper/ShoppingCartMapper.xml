@@ -29,14 +29,14 @@
     </select>
 
 <!--    购物车里项目的更新，暂时应该只会更新数量  -->
-    <update id="updateItem">
+    <update id="updateExistingItem">
         update shopping_cart
         <set>
             <if test="number != null">
                 number = #{number},
             </if>
         </set>
-        where user_id = #{userId}
+        where id = #{id}
     </update>
 
 </mapper>

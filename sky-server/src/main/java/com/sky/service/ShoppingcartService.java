@@ -12,4 +12,6 @@ public interface ShoppingcartService {
     List<ShoppingCartItem> listShoppingCartItems();
 
     void clearShoppingCart();
+
+    void deductShoppingcartItemQuantity(ShoppingCartDTO shoppingCartDTO);
 }

@@ -34,4 +34,12 @@ public class ShoppingcartController {
         shoppingcartService.clearShoppingCart();
         return Result.success();
     }
+
+    @PostMapping("/sub")
+    @ApiOperation("从购物车中扣除商品")
+    public Result deductShoppingcartItemQuantity(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        shoppingcartService.deductShoppingcartItemQuantity(shoppingCartDTO);
+        return Result.success();
+    }
+
 }
