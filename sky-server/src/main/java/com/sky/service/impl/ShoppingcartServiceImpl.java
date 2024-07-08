@@ -5,7 +5,6 @@ import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.ShoppingCartItem;
-import com.sky.exception.BaseException;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.mapper.ShoppingCartMapper;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ShoppingcartServiceImpl implements ShoppingcartService {
@@ -59,15 +59,9 @@ public class ShoppingcartServiceImpl implements ShoppingcartService {
         }
 
     }
-}
 
-//id bigint AI PK
-//name varchar(32)
-//image varchar(255)
-//user_id bigint
-//dish_id bigint
-//setmeal_id bigint
-//dish_flavor varchar(50)
-//number int
-//amount decimal(10,2)
-//create_time datetime
+    @Override
+    public List<ShoppingCartItem> listShoppingCartItems() {
+        return shoppingCartMapper.listShoppingCartItems(BaseContext.getCurrentId());
+    }
+}
