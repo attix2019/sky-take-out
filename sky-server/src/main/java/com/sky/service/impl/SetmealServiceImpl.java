@@ -2,6 +2,7 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.KeyForCacheConstant;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
@@ -15,11 +16,12 @@ import com.sky.service.SetmealService;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -33,6 +35,7 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = KeyForCacheConstant.SETMEALS_OF_CATEGORY_ID, key="#setmealDTO.categoryId")
     public void addSetmeal(SetmealDTO setmealDTO) {
         Setmeal setmeal = new Setmeal();
         BeanUtils.copyProperties(setmealDTO, setmeal);
@@ -53,6 +56,7 @@ public class SetmealServiceImpl implements SetmealService {
     }
 
     @Override
+    @CacheEvict(cacheNames = KeyForCacheConstant.SETMEALS_OF_CATEGORY_ID, allEntries = true)
     public void updateSetmealStatus(long id, int status) {
         Setmeal setmeal = new Setmeal();
         setmeal.setStatus(status);
@@ -73,6 +77,7 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = {KeyForCacheConstant.SETMEALS_OF_CATEGORY_ID, KeyForCacheConstant.CONTENT_OF_SETMEAL_ID}, allEntries = true)
     public void updateSetmeal(SetmealDTO setmealDTO) {
         Setmeal setmeal = new Setmeal();
         BeanUtils.copyProperties(setmealDTO, setmeal);
@@ -88,6 +93,7 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = KeyForCacheConstant.SETMEALS_OF_CATEGORY_ID, allEntries = true)
     public void deleteSetmeals(List<Long> idList) {
         // 启用中的套餐不能删除
         int activeSetmealNum = setmealMapper.countActiveSetmealByIds(idList);
@@ -101,11 +107,13 @@ public class SetmealServiceImpl implements SetmealService {
     }
 
     @Override
+    @Cacheable(cacheNames = KeyForCacheConstant.SETMEALS_OF_CATEGORY_ID, key = "#categoryId")
     public List findSetmealsByCategoryId(Integer categoryId) {
         return setmealMapper.findSetmealsByCategoryID(categoryId);
     }
 
     @Override
+    @Cacheable(cacheNames = KeyForCacheConstant.CONTENT_OF_SETMEAL_ID, key = "#id")
     public List getSetmealContentById(Integer id) {
         return setmealDishMapper.findSetmealDishesBySetmealId(id);
     }
