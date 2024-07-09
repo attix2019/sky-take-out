@@ -3,7 +3,7 @@ package com.sky.dto;
 import lombok.Data;
 
 @Data
-public class DefaultAddressDTO {
+public class AddressIdDTO {
 
     private Long id;
 }

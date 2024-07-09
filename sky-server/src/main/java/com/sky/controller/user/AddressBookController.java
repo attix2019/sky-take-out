@@ -1,6 +1,6 @@
 package com.sky.controller.user;
 
-import com.sky.dto.DefaultAddressDTO;
+import com.sky.dto.AddressIdDTO;
 import com.sky.entity.AddressItem;
 import com.sky.result.Result;
 import com.sky.service.AddressBookService;
@@ -36,8 +36,8 @@ public class AddressBookController {
 
     @PutMapping("/default")
     @ApiOperation("设置某地址为默认地址")
-    public Result setAddressItemASDefault(@RequestBody DefaultAddressDTO defaultAddressDTO){
-        addressBookService.setAddressItemAsDefault(defaultAddressDTO.getId());
+    public Result setAddressItemASDefault(@RequestBody AddressIdDTO addressIdDTO){
+        addressBookService.setAddressItemAsDefault(addressIdDTO.getId());
         return Result.success();
     }
 
@@ -59,6 +59,13 @@ public class AddressBookController {
     @ApiOperation("根据id查询地址项")
     public Result getAddressItemById(@PathVariable long id){
         return Result.success(addressBookService.getAddressItemById(id));
+    }
+
+    @DeleteMapping
+    @ApiOperation("根据id删除地址项")
+    public Result deleteAddressItemById(@RequestBody AddressIdDTO addressIdDTO){
+        addressBookService.deleteAddressItemById(addressIdDTO.getId());
+        return Result.success();
     }
 
 }

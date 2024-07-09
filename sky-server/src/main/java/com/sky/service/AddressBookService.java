@@ -17,4 +17,6 @@ public interface AddressBookService {
     void updateAddresItem(AddressItem addressItem);
 
     AddressItem getAddressItemById(long id);
+
+    void deleteAddressItemById(long id);
 }

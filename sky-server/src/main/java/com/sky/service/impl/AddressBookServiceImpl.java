@@ -53,4 +53,9 @@ public class AddressBookServiceImpl implements AddressBookService {
     public AddressItem getAddressItemById(long id) {
         return addressBookMapper.getAddressItemById(id);
     }
+
+    @Override
+    public void deleteAddressItemById(long id) {
+        addressBookMapper.deleteAddressItemById(id);
+    }
 }
