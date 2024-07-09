@@ -3,6 +3,9 @@ package com.sky.mapper;
 import com.sky.entity.AddressItem;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface AddressBookMapper {
@@ -13,4 +16,8 @@ public interface AddressBookMapper {
             "        values (#{userId}, #{consignee}, #{phone}, #{sex}, #{provinceCode}, #{provinceName}, #{cityCode}, #{cityName}," +
             "                #{districtCode}, #{districtName}, #{detail}, #{label}, #{isDefault})")
     void insertAddress(AddressItem addressItem);
+
+
+    @Select("select * from address_book where user_id= #{userId}")
+    List<AddressItem> getAddressItemListByUserId(Long userId);
 }
