@@ -64,13 +64,12 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderTime(now);
         order.setPayStatus(0);
 
-        AddressItem addressItem2 =  addressBookMapper.getAddressItemById(order.getAddressBookId());
-        order.setAddress(addressItem2.getDetail());
-        order.setPhone(addressItem2.getPhone());
-        order.setConsignee(addressItem2.getConsignee());
+        order.setAddress(addressItem.getDetail());
+        order.setPhone(addressItem.getPhone());
+        order.setConsignee(addressItem.getConsignee());
 
         DateTimeFormatter ofPattern = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
-        order.setNumber(BaseContext.getCurrentId() + "_" + now.format(ofPattern));
+        order.setNumber(BaseContext.getCurrentId() + "#" + now.format(ofPattern));
 
         orderMapper.insertOrder(order);
 
