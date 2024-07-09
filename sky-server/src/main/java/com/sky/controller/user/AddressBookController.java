@@ -48,4 +48,17 @@ public class AddressBookController {
         return Result.success(addressBookService.getDefaultAddressItem());
     }
 
+    @PutMapping
+    @ApiOperation("编辑地址项")
+    public Result updateAddressItem(@RequestBody AddressItem addressItem){
+        addressBookService.updateAddresItem(addressItem);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询地址项")
+    public Result getAddressItemById(@PathVariable long id){
+        return Result.success(addressBookService.getAddressItemById(id));
+    }
+
 }

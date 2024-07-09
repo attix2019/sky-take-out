@@ -13,4 +13,8 @@ public interface AddressBookService {
     AddressItem getDefaultAddressItem();
 
     void setAddressItemAsDefault(long addressId);
+
+    void updateAddresItem(AddressItem addressItem);
+
+    AddressItem getAddressItemById(long id);
 }

@@ -43,4 +43,14 @@ public class AddressBookServiceImpl implements AddressBookService {
         }
         addressBookMapper.setAddressItemAsDefaultValue(addressId, 1);
     }
+
+    @Override
+    public void updateAddresItem(AddressItem addressItem) {
+        addressBookMapper.updateAddresItem(addressItem);
+    }
+
+    @Override
+    public AddressItem getAddressItemById(long id) {
+        return addressBookMapper.getAddressItemById(id);
+    }
 }

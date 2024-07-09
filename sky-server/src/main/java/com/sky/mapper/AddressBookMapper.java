@@ -29,4 +29,9 @@ public interface AddressBookMapper {
     @Select("select * from address_book where user_id = #{userId} and is_default=1")
     AddressItem getDefaultAddressItemByUserId(long userId);
 
+    void updateAddresItem(AddressItem addressItem);
+
+    @Select("select * from address_book where id = #{id}")
+    AddressItem getAddressItemById(long id);
+
 }
