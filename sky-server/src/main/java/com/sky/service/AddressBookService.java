@@ -9,4 +9,8 @@ public interface AddressBookService {
     void addAddress(AddressItem addressItem);
 
     List<AddressItem> getAddressItemList();
+
+    AddressItem getDefaultAddressItem();
+
+    void setAddressItemAsDefault(long addressId);
 }

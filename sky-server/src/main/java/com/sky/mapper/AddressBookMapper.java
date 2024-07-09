@@ -4,6 +4,7 @@ import com.sky.entity.AddressItem;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -20,4 +21,12 @@ public interface AddressBookMapper {
 
     @Select("select * from address_book where user_id= #{userId}")
     List<AddressItem> getAddressItemListByUserId(Long userId);
+
+
+    @Update("update address_book set is_default= #{isDefault} where id = #{id}")
+    void setAddressItemAsDefaultValue(long id, int isDefault);
+
+    @Select("select * from address_book where user_id = #{userId} and is_default=1")
+    AddressItem getDefaultAddressItemByUserId(long userId);
+
 }
