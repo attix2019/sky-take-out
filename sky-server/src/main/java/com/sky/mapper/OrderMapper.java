@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -23,5 +24,11 @@ public interface OrderMapper {
     OrderVO getOrderById(long id);
 
     void updateOrder(Orders order);
+
+    @Select("select sum(status = 2) toBeConfirmed," +
+            "    sum(status = 3) confirmed," +
+            "    sum(status = 4) deliveryInProgress " +
+            "from orders")
+    OrderStatisticsVO getOrderStatistics();
 
 }

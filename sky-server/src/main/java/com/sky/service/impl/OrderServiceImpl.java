@@ -19,6 +19,7 @@ import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShoppingCartMapper;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
@@ -103,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void pay(OrdersPaymentDTO ordersPaymentDTO) {
-        orderMapper.updateOrderStatusAndPayStatus(ordersPaymentDTO.getOrderNumber(), 5, 1);
+        orderMapper.updateOrderStatusAndPayStatus(ordersPaymentDTO.getOrderNumber(), 2, 1);
     }
 
     @Override
@@ -163,6 +164,11 @@ public class OrderServiceImpl implements OrderService {
         order.setCancelReason("用户取消订单");
         order.setCancelTime(LocalDateTime.now());
         orderMapper.updateOrder(order);
+    }
+
+    @Override
+    public OrderStatisticsVO getOrderStatistics() {
+        return orderMapper.getOrderStatistics();
     }
 }
 
