@@ -46,4 +46,11 @@ public class OrderController {
     public Result getOrderContentById(@PathVariable long id){
         return Result.success(orderService.getOrderContentById(id));
     }
+
+    @PostMapping("/repetition/{id}")
+    @ApiOperation("再来一单")
+    public Result repeatOrder(@PathVariable long id){
+        orderService.repeatOrder(id);
+        return Result.success();
+    }
 }

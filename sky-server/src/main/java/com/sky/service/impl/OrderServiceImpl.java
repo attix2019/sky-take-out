@@ -19,8 +19,6 @@ import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShoppingCartMapper;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
-import com.sky.utils.WeChatPayUtil;
-import com.sky.vo.DishVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
@@ -125,6 +123,18 @@ public class OrderServiceImpl implements OrderService {
         OrderVO orderVO = orderMapper.getOrderById(id);
         orderVO.setOrderDetailList( orderDetailMapper.getOrderDetailByOrderId(id));
         return orderVO;
+    }
+
+    @Override
+    public void repeatOrder(long id) {
+        List<OrderDetail> orderDetails =  orderDetailMapper.getOrderDetailByOrderId(id);
+        for(OrderDetail orderDetail : orderDetails ){
+            ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+            BeanUtils.copyProperties(orderDetail, shoppingCartItem);
+            shoppingCartItem.setCreateTime(LocalDateTime.now());
+            shoppingCartItem.setUserId(BaseContext.getCurrentId());
+            shoppingCartMapper.insertItem(shoppingCartItem);
+        }
     }
 }
 

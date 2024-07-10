@@ -17,4 +17,6 @@ public interface OrderService {
     PageResult pageQueryHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 
     OrderVO getOrderContentById(long id);
+
+    void repeatOrder(long id);
 }
