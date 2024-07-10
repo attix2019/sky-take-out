@@ -1,6 +1,10 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
+import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
@@ -11,4 +15,6 @@ public interface OrderMapper {
 
     @Update("update orders set status=#{status} , pay_status=#{payStatus} where number=#{orderNumber}")
     void updateOrderStatusAndPayStatus(String orderNumber, int status, int payStatus);
+
+    Page<OrderVO> pageQueryHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO);
 }

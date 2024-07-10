@@ -1,7 +1,10 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.AddressItem;
@@ -14,9 +17,12 @@ import com.sky.mapper.AddressBookMapper;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShoppingCartMapper;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
+import com.sky.vo.DishVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,6 +106,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void pay(OrdersPaymentDTO ordersPaymentDTO) {
         orderMapper.updateOrderStatusAndPayStatus(ordersPaymentDTO.getOrderNumber(), 5, 1);
+    }
+
+    @Override
+    public PageResult pageQueryHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
+        Page<OrderVO> orderVOs = orderMapper.pageQueryHistoryOrders(ordersPageQueryDTO);
+        for( OrderVO orderVO : orderVOs){
+            // 查出明细
+            List<OrderDetail> orderDetails = orderDetailMapper.getOrderDetailByOrderId(orderVO.getId());
+            orderVO.setOrderDetailList(orderDetails);
+        }
+        return new PageResult(orderVOs.getTotal(), orderVOs.getResult());
     }
 }
 

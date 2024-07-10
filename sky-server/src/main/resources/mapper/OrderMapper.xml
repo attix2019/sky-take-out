@@ -16,4 +16,14 @@
                #{packAmount}, #{tablewareNumber}, #{tablewareStatus})
     </insert>
 
+
+    <select id="pageQueryHistoryOrders" resultType="com.sky.vo.OrderVO">
+        select * from orders
+        <where>
+            <if test = "status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
 </mapper>
