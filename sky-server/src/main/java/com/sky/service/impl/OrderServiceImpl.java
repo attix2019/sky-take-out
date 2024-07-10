@@ -136,6 +136,34 @@ public class OrderServiceImpl implements OrderService {
             shoppingCartMapper.insertItem(shoppingCartItem);
         }
     }
+
+    @Override
+    public void cancelOrder(long id) {
+        /*
+        - 待支付和待接单状态下，用户可直接取消订单
+        - 商家已接单状态下，用户取消订单需电话沟通商家;派送中状态下，用户取消订单需电话沟通商家
+        - 如果在待接单状态下取消订单，需要给用户退款
+        - 取消订单后需要将订单状态修改为“已取消”
+        * */
+        Orders order = orderMapper.getOrderById(id);
+        if(order == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        int status = order.getStatus();
+        if(status == Orders.COMPLETED || status == Orders.CANCELLED){
+            throw  new OrderBusinessException("订单状态异常，无法取消");
+        }
+        if(status == Orders.CONFIRMED || status == Orders.DELIVERY_IN_PROGRESS){
+            throw new OrderBusinessException("取消订单事宜请与商家电话沟通");
+        }
+        if(status == Orders.TO_BE_CONFIRMED){
+            // TODO 真正接入支付以后需要调用退款的api
+        }
+        order.setStatus(Orders.CANCELLED);
+        order.setCancelReason("用户取消订单");
+        order.setCancelTime(LocalDateTime.now());
+        orderMapper.updateOrder(order);
+    }
 }
 
 
