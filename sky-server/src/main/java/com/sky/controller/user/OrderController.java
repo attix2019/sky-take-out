@@ -40,4 +40,10 @@ public class OrderController {
     public Result getHistoryOrders(OrdersPageQueryDTO ordersPageQueryDTO){
         return Result.success(orderService.pageQueryHistoryOrders(ordersPageQueryDTO));
     }
+
+    @GetMapping("/orderDetail/{id}")
+    @ApiOperation("根据id查询订单详情")
+    public Result getOrderContentById(@PathVariable long id){
+        return Result.success(orderService.getOrderContentById(id));
+    }
 }

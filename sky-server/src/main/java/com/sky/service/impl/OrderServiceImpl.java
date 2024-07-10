@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
         for(ShoppingCartItem shoppingCartItem : items){
             OrderDetail orderDetail = new OrderDetail();
             BeanUtils.copyProperties(shoppingCartItem, orderDetail);
-            orderDetail.setOrderId(BaseContext.getCurrentId());
+            orderDetail.setOrderId(order.getId());
             orderDetails.add(orderDetail);
         }
         orderDetailMapper.insertOrderDetails(orderDetails);
@@ -118,6 +118,13 @@ public class OrderServiceImpl implements OrderService {
             orderVO.setOrderDetailList(orderDetails);
         }
         return new PageResult(orderVOs.getTotal(), orderVOs.getResult());
+    }
+
+    @Override
+    public OrderVO getOrderContentById(long id) {
+        OrderVO orderVO = orderMapper.getOrderById(id);
+        orderVO.setOrderDetailList( orderDetailMapper.getOrderDetailByOrderId(id));
+        return orderVO;
     }
 }
 

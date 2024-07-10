@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.OrderMapper">
 
-    <insert id="insertOrder">
+    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="id">
         insert into orders(number, status, user_id, address_book_id, order_time,
                                         checkout_time, pay_method, pay_status, amount, remark, phone,
                                         address, user_name, consignee, cancel_reason, rejection_reason,
