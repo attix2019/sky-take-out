@@ -35,4 +35,11 @@ public class StatisticsController {
         return Result.success(statiscticsService.getUserStatistics(begin, end));
     }
 
+    @GetMapping("/top10")
+    @ApiOperation("销量前十统计")
+    public Result getTopTenItems(
+            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end){
+        return Result.success(statiscticsService.getTopTenItems(begin, end));
+    }
 }

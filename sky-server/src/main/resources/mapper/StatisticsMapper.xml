@@ -28,7 +28,7 @@
 
     <select id="getNewUserPerDay" resultMap="resultMap2">
         SELECT  substring(create_time,1,10) as date , count(*) as new_user FROM user
-        where create_time &gt;= #{begin}  and create_time &lt;= #{end}
+        where create_time &gt;= #{begin}  and create_time &lt;= DATE_ADD(#{end}, interval 1 day)
         group BY substring(create_time,1,10)
         order by substring(create_time,1,10) asc;
     </select>
@@ -39,10 +39,20 @@
             @cumulative_count := @cumulative_count + new_user AS cumulative_user_count
         FROM
             (   SELECT  substring(create_time,1,10) as date , count(*) as new_user FROM user
-                where create_time &lt;= #{end}
+                where create_time &lt;= DATE_ADD(#{end}, interval 1 day)
                 group BY substring(create_time,1,10)
                 order by substring(create_time,1,10) asc) AS unique_dates
                 JOIN
                 (  SELECT @cumulative_count := 0) AS init;
+    </select>
+
+
+    <select id="getTopTenItems" resultType="com.sky.vo.SalesTop10Item">
+        select tmp.name as name, sum(number) as number from(
+            select od.name, od.number, o.status, o.order_time from order_detail as od left join orders as o on od.order_id = o.id
+            where status=5 and  o.order_time &gt;= #{begin}  and order_time &lt;= DATE_ADD(#{end}, interval 1 day)) as tmp
+        group by name
+        order by number desc
+        limit 10;
     </select>
 </mapper>

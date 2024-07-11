@@ -2,8 +2,7 @@ package com.sky.service;
 
 import com.sky.handler.MapResultHandler;
 import com.sky.mapper.StatisticsMapper;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
+import com.sky.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +87,28 @@ public class StatiscticsServiceImpl implements  StatiscticsService {
                 dateList(dateListStr).
                 newUserList(newUserList)
                 .totalUserList(totalUserList)
+                .build();
+    }
+
+    @Override
+    public OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end) {
+
+        return OrderReportVO.builder().build();
+    }
+
+    @Override
+    public SalesTop10ReportVO getTopTenItems(LocalDate begin, LocalDate end){
+        MapResultHandler mapResultHandler = new MapResultHandler();
+        List<SalesTop10Item> top10Items = statisticsMapper.getTopTenItems(begin, end);
+        List<String> names = new LinkedList<>();
+        List<String> number = new LinkedList<>();
+        for(SalesTop10Item top10Item : top10Items){
+            names.add(top10Item.getName());
+            number.add(top10Item.getNumber().toString());
+        }
+        return SalesTop10ReportVO.builder()
+                .nameList(String.join("," ,names))
+                .numberList( String.join(",", number))
                 .build();
     }
 
