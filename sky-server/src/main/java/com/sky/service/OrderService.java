@@ -32,4 +32,6 @@ public interface OrderService {
     void deliverOrder(long id);
 
     void finishOrder(long id);
+
+    void pushForOrder(long id );
 }

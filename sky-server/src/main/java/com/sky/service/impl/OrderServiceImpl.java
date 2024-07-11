@@ -1,9 +1,12 @@
 package com.sky.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.websocket.WebSocketEndPoint;
 import com.sky.dto.*;
 import com.sky.entity.AddressItem;
 import com.sky.entity.OrderDetail;
@@ -20,6 +23,7 @@ import com.sky.service.OrderService;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +31,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -44,6 +51,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OrderDetailMapper orderDetailMapper;
+
+    @Autowired
+    WebSocketEndPoint webSocketEndPoint;
 
     @Override
     @Transactional
@@ -103,6 +113,21 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void pay(OrdersPaymentDTO ordersPaymentDTO) {
         orderMapper.updateOrderStatusAndPayStatus(ordersPaymentDTO.getOrderNumber(), 2, 1);
+
+        Orders order = orderMapper.getOrderByOrderNumber(ordersPaymentDTO.getOrderNumber());
+
+        Map<String, String> notice = new HashMap<>();
+        notice.put("type", "1");
+        notice.put("orderId", order.getId().toString());
+        notice.put("content", ordersPaymentDTO.getOrderNumber());
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String jacksonData = objectMapper.writeValueAsString(notice);
+            webSocketEndPoint.notifyAdmin(jacksonData);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        log.info("支付成功");
     }
 
     @Override
@@ -212,6 +237,23 @@ public class OrderServiceImpl implements OrderService {
         orders.setStatus(Orders.COMPLETED);
         orders.setDeliveryTime(LocalDateTime.now());
         orderMapper.updateOrder(orders);
+    }
+
+
+    @Override
+    public void pushForOrder(long id) {
+        Orders order = orderMapper.getOrderById(id);
+        Map<String, String> notice = new HashMap<>();
+        notice.put("type", "2");
+        notice.put("orderId", String.valueOf(id));
+        notice.put("content", order.getNumber());
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String jacksonData = objectMapper.writeValueAsString(notice);
+            webSocketEndPoint.notifyAdmin(jacksonData);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }
 

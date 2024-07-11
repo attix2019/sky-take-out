@@ -9,6 +9,7 @@ import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.core.annotation.Order;
 
 @Mapper
 public interface OrderMapper {
@@ -30,5 +31,10 @@ public interface OrderMapper {
             "    sum(status = 4) deliveryInProgress " +
             "from orders")
     OrderStatisticsVO getOrderStatistics();
+
+
+    @Select("select * from orders where number = #{orderNumber}")
+    Orders getOrderByOrderNumber(String orderNumber);
+
 
 }

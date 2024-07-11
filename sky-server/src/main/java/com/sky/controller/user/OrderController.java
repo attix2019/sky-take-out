@@ -5,7 +5,6 @@ import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
-import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +57,13 @@ public class OrderController {
     @ApiOperation("取消订单")
     public Result cancelOrder(@PathVariable long id){
         orderService.cancelOrder(id);
+        return Result.success();
+    }
+
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("催商家接单")
+    public Result pushForOrder(@PathVariable long id){
+        orderService.pushForOrder(id);
         return Result.success();
     }
 }
