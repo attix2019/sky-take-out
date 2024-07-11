@@ -1,8 +1,11 @@
 package com.sky.service;
 
+import com.sky.entity.User;
 import com.sky.handler.MapResultHandler;
+import com.sky.handler.UserStatisticResultHandler;
 import com.sky.mapper.StatisticsMapper;
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +59,48 @@ public class StatiscticsServiceImpl implements  StatiscticsService {
         }
         String turnoverList = String.join(",", turnoverStrList);
         return TurnoverReportVO.builder().dateList(dateListStr).turnoverList(turnoverList).build();
+    }
+
+    @Override
+    public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
+        List<LocalDate> dateList = new LinkedList<>();
+        LocalDate tmp = begin;
+        while(!tmp.equals(end)){
+            dateList.add(tmp);
+            tmp = tmp.plus(1, ChronoUnit.DAYS);
+        }
+        dateList.add(end);
+        List<String> dateStrList = dateList.stream().map(date -> date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .collect(Collectors.toList());
+        String dateListStr = String.join(",", dateStrList);
+
+        UserStatisticResultHandler userStatisticResultHandler = new UserStatisticResultHandler();
+        statisticsMapper.getNewUserPerDay( begin, end, userStatisticResultHandler);
+        Map<String, Integer> userPerdayStatistic = userStatisticResultHandler.getMappedResults();
+
+        List<String> newUserStrList = new LinkedList<>();
+        for(String datestr : dateStrList){
+            Integer newUserCount = userPerdayStatistic.getOrDefault( datestr , 0);
+            newUserStrList.add(String.valueOf(newUserCount));
+        }
+        String newUserList = String.join(",", newUserStrList);
+
+
+        userStatisticResultHandler = new UserStatisticResultHandler();
+        statisticsMapper.getAccumulatedUserNumber(begin, end, userStatisticResultHandler);
+        Map<String, Integer> userTotal = userStatisticResultHandler.getMappedResults();
+        List<String> userTotalList = new LinkedList<>();
+        for(String datestr : dateStrList){
+            Integer newUserCount = userTotal.getOrDefault( datestr , 0);
+            userTotalList.add(String.valueOf(newUserCount));
+        }
+        String totalUserList = String.join(",", userTotalList);
+
+        return UserReportVO.builder().
+                dateList(dateListStr).
+                newUserList(newUserList)
+                .totalUserList(totalUserList)
+                .build();
     }
 
 }

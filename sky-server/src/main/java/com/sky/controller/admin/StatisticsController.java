@@ -26,4 +26,13 @@ public class StatisticsController {
             @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end){
         return Result.success(statiscticsService.getTurnoverStatistics(begin, end));
     }
+
+    @GetMapping("/userStatistics")
+    @ApiOperation("用户统计")
+    public Result getUserStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end){
+        return Result.success(statiscticsService.getUserStatistics(begin, end));
+    }
+
 }
