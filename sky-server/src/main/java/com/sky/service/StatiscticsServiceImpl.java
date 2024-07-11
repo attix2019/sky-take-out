@@ -1,8 +1,6 @@
 package com.sky.service;
 
-import com.sky.entity.User;
 import com.sky.handler.MapResultHandler;
-import com.sky.handler.UserStatisticResultHandler;
 import com.sky.mapper.StatisticsMapper;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
@@ -28,9 +26,10 @@ public class StatiscticsServiceImpl implements  StatiscticsService {
     @Autowired
     StatisticsMapper statisticsMapper;
 
-    @Override
-    public TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end) {
+    @Autowired
+    MapResultHandler mapResultHandler;
 
+    private List<String> createDateStringList(LocalDate begin, LocalDate end){
         List<LocalDate> dateList = new LinkedList<>();
         LocalDate tmp = begin;
         while(!tmp.equals(end)){
@@ -40,9 +39,15 @@ public class StatiscticsServiceImpl implements  StatiscticsService {
         dateList.add(end);
         List<String> dateStrList = dateList.stream().map(date -> date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .collect(Collectors.toList());
+        return dateStrList;
+    }
+
+
+    @Override
+    public TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end) {
+        List<String> dateStrList = createDateStringList(begin, end);
         String dateListStr = String.join(",", dateStrList);
 
-        MapResultHandler mapResultHandler = new MapResultHandler();
         statisticsMapper.getTurnoverStatisticsInARange(begin, end, mapResultHandler);
         Map<Date, Double> handledResult = mapResultHandler.getMappedResults();
 
@@ -63,20 +68,12 @@ public class StatiscticsServiceImpl implements  StatiscticsService {
 
     @Override
     public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
-        List<LocalDate> dateList = new LinkedList<>();
-        LocalDate tmp = begin;
-        while(!tmp.equals(end)){
-            dateList.add(tmp);
-            tmp = tmp.plus(1, ChronoUnit.DAYS);
-        }
-        dateList.add(end);
-        List<String> dateStrList = dateList.stream().map(date -> date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .collect(Collectors.toList());
+        List<String> dateStrList = createDateStringList(begin, end);
         String dateListStr = String.join(",", dateStrList);
 
-        UserStatisticResultHandler userStatisticResultHandler = new UserStatisticResultHandler();
-        statisticsMapper.getNewUserPerDay( begin, end, userStatisticResultHandler);
-        Map<String, Integer> userPerdayStatistic = userStatisticResultHandler.getMappedResults();
+
+        statisticsMapper.getNewUserPerDay( begin, end, mapResultHandler );
+        Map<String, Integer> userPerdayStatistic = mapResultHandler.getMappedResults();
 
         List<String> newUserStrList = new LinkedList<>();
         for(String datestr : dateStrList){
@@ -86,9 +83,8 @@ public class StatiscticsServiceImpl implements  StatiscticsService {
         String newUserList = String.join(",", newUserStrList);
 
 
-        userStatisticResultHandler = new UserStatisticResultHandler();
-        statisticsMapper.getAccumulatedUserNumber(begin, end, userStatisticResultHandler);
-        Map<String, Integer> userTotal = userStatisticResultHandler.getMappedResults();
+        statisticsMapper.getAccumulatedUserNumber(begin, end, mapResultHandler);
+        Map<String, Integer> userTotal = mapResultHandler.getMappedResults();
         List<String> userTotalList = new LinkedList<>();
         for(String datestr : dateStrList){
             Integer newUserCount = userTotal.getOrDefault( datestr , 0);
