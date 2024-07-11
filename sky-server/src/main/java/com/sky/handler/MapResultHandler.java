@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
 public class MapResultHandler implements ResultHandler {
     private final Map mappedResults = new HashMap();
 

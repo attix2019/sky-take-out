@@ -26,9 +26,6 @@ public class StatiscticsServiceImpl implements  StatiscticsService {
     @Autowired
     StatisticsMapper statisticsMapper;
 
-    @Autowired
-    MapResultHandler mapResultHandler;
-
     private List<String> createDateStringList(LocalDate begin, LocalDate end){
         List<LocalDate> dateList = new LinkedList<>();
         LocalDate tmp = begin;
@@ -42,54 +39,49 @@ public class StatiscticsServiceImpl implements  StatiscticsService {
         return dateStrList;
     }
 
+    private  <B> List<String> generateFittingList(Map<String,B> handledMap, List<String> dates, Object defaultValue){
+        List<String> targetList = new LinkedList<>();
+        for(String datestr : dates){
+            B turnover  = handledMap.getOrDefault( datestr , (B)defaultValue);
+            targetList.add(String.valueOf(turnover));
+        }
+        return targetList;
+    }
 
     @Override
     public TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end) {
         List<String> dateStrList = createDateStringList(begin, end);
         String dateListStr = String.join(",", dateStrList);
 
+        MapResultHandler mapResultHandler = new MapResultHandler();
         statisticsMapper.getTurnoverStatisticsInARange(begin, end, mapResultHandler);
-        Map<Date, Double> handledResult = mapResultHandler.getMappedResults();
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        List<String> turnoverStrList = new LinkedList<>();
-        for(String datestr : dateStrList){
-            Double turnover = null;
-            try {
-                turnover = handledResult.getOrDefault( formatter.parse(datestr) , 0.0);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            turnoverStrList.add(String.valueOf(turnover));
-        }
+        Map<String, Double> handledResult = mapResultHandler.getMappedResults();
+        List<String> turnoverStrList = generateFittingList(handledResult, dateStrList, 0.0);
         String turnoverList = String.join(",", turnoverStrList);
-        return TurnoverReportVO.builder().dateList(dateListStr).turnoverList(turnoverList).build();
+
+        return TurnoverReportVO.builder()
+                .dateList(dateListStr)
+                .turnoverList(turnoverList)
+                .build();
     }
+
 
     @Override
     public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
         List<String> dateStrList = createDateStringList(begin, end);
         String dateListStr = String.join(",", dateStrList);
 
-
+        MapResultHandler mapResultHandler = new MapResultHandler();
         statisticsMapper.getNewUserPerDay( begin, end, mapResultHandler );
         Map<String, Integer> userPerdayStatistic = mapResultHandler.getMappedResults();
-
-        List<String> newUserStrList = new LinkedList<>();
-        for(String datestr : dateStrList){
-            Integer newUserCount = userPerdayStatistic.getOrDefault( datestr , 0);
-            newUserStrList.add(String.valueOf(newUserCount));
-        }
+        List<String> newUserStrList = generateFittingList(userPerdayStatistic, dateStrList, 0);
         String newUserList = String.join(",", newUserStrList);
 
 
+        mapResultHandler = new MapResultHandler();
         statisticsMapper.getAccumulatedUserNumber(begin, end, mapResultHandler);
         Map<String, Integer> userTotal = mapResultHandler.getMappedResults();
-        List<String> userTotalList = new LinkedList<>();
-        for(String datestr : dateStrList){
-            Integer newUserCount = userTotal.getOrDefault( datestr , 0);
-            userTotalList.add(String.valueOf(newUserCount));
-        }
+        List<String> userTotalList = generateFittingList(userTotal, dateStrList, 0);
         String totalUserList = String.join(",", userTotalList);
 
         return UserReportVO.builder().

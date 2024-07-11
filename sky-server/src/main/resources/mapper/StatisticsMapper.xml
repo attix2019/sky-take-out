@@ -4,7 +4,7 @@
 <mapper namespace="com.sky.mapper.StatisticsMapper">
 
     <resultMap id="resultMap1" type="java.util.Map">
-        <result property="key" column="date" />
+        <result property="key" column="date" javaType="java.lang.String" />
         <result property="value" column="turnover" javaType="java.lang.Double"/>
     </resultMap>
 
@@ -19,10 +19,10 @@
     </resultMap>
 
     <select id="getTurnoverStatisticsInARange" resultMap="resultMap1">
-        select Date(order_time) as date, sum(amount)  as turnover
+        select substring(order_time,1,10) as date, sum(amount)  as turnover
         from orders
         where status = 5 and (order_time &gt;= #{begin} and order_time &lt;= DATE_ADD(#{end}, interval 1 day))
-        group by Date(order_time)
+        group by substring(order_time,1,10)
     </select>
 
 
