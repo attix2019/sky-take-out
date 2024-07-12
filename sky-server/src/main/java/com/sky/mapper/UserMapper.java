@@ -12,4 +12,7 @@ public interface UserMapper {
     User findUserByOpenId(String openid);
 
     void insertUser(User user);
+
+    @Select("select count(*) from user where substring(create_time,1,10)=CURDATE() ")
+    Integer countNewUserToday();
 }

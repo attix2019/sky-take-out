@@ -36,5 +36,9 @@ public interface OrderMapper {
     @Select("select * from orders where number = #{orderNumber}")
     Orders getOrderByOrderNumber(String orderNumber);
 
+    @Select("select ifnull(sum(amount),0) from orders where status = 5 and substring(order_time,1,10)=CURDATE()")
+    Double getTurnOverToday();
+
+
 
 }

@@ -71,7 +71,7 @@
     </select>
 
     <sql id="countOrder">
-        select count(*) from orders
+        select ifnull(count(*),0) from orders
         <where>
             <if test = "begin != null">
                 and order_time &gt;= #{begin}
