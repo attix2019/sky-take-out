@@ -1,14 +1,17 @@
 package com.sky.service.impl;
 
+import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.StatisticsMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.DashBoardService;
 import com.sky.vo.BusinessDataVO;
+import com.sky.vo.OrderOverViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 @Service
 public class DashBoardServiceImpl implements DashBoardService {
@@ -35,6 +38,33 @@ public class DashBoardServiceImpl implements DashBoardService {
                 .orderCompletionRate(ordersCountInTotal == 0? 0 : (double)validOrdersCount/ordersCountInTotal)
                 .newUsers(newUserCountToday)
                 .unitPrice(validOrdersCount == 0 ? 0 : turnOverToday/validOrdersCount)
+                .build();
+    }
+
+    @Override
+    public OrderOverViewVO getOrderOverview() {
+        LocalDate today = LocalDate.now();
+        int ordersToBeConfirmedNumber = orderMapper.getOrderCountByStatusAndDate(today,
+                Arrays.asList(Orders.TO_BE_CONFIRMED));
+        int ordersToDeliverNumber = orderMapper.getOrderCountByStatusAndDate(today,
+                Arrays.asList(Orders.CONFIRMED));
+        int finishedOrdersNumber = orderMapper.getOrderCountByStatusAndDate(today,
+                Arrays.asList(Orders.COMPLETED));
+        int canceledOrdersNumber = orderMapper.getOrderCountByStatusAndDate(today,
+                Arrays.asList(Orders.CANCELLED));
+        int orderNumberInTotal =  orderMapper.getOrderCountByStatusAndDate(today,
+                Arrays.asList(Orders.PENDING_PAYMENT,
+                        Orders.TO_BE_CONFIRMED,
+                        Orders.CONFIRMED,
+                        Orders.DELIVERY_IN_PROGRESS,
+                        Orders.COMPLETED,
+                        Orders.CANCELLED));
+        return OrderOverViewVO.builder()
+                .allOrders(orderNumberInTotal)
+                .cancelledOrders(canceledOrdersNumber)
+                .completedOrders(finishedOrdersNumber)
+                .waitingOrders(ordersToBeConfirmedNumber)
+                .deliveredOrders(ordersToDeliverNumber)
                 .build();
     }
 }

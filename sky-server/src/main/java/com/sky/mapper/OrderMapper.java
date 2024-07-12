@@ -11,6 +11,9 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.core.annotation.Order;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Mapper
 public interface OrderMapper {
 
@@ -39,6 +42,6 @@ public interface OrderMapper {
     @Select("select ifnull(sum(amount),0) from orders where status = 5 and substring(order_time,1,10)=CURDATE()")
     Double getTurnOverToday();
 
-
+    Integer getOrderCountByStatusAndDate(LocalDate date, List<Integer> statuses);
 
 }

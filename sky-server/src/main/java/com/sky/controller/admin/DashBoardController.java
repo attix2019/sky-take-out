@@ -24,4 +24,10 @@ public class DashBoardController {
     public Result getBusinessDataToday(){
         return Result.success(dashBoardService.getBusinessDataToday());
     }
+
+    @GetMapping("/overviewOrders")
+    @ApiOperation("查询订单管理数据")
+    public Result getOrderOverview(){
+        return Result.success(dashBoardService.getOrderOverview());
+    }
 }

@@ -53,4 +53,12 @@
         where id=#{id}
     </update>
 
+
+    <select id="getOrderCountByStatusAndDate"  resultType="Integer">
+        select count(*) from orders where status in
+        <foreach collection="statuses" item="status" index="index" open="(" close=")" separator=",">
+            #{status}
+        </foreach>
+        and substring(order_time,1,10)=#{date}
+    </select>
 </mapper>
