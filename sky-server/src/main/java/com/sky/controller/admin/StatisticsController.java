@@ -42,4 +42,12 @@ public class StatisticsController {
             @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end){
         return Result.success(statiscticsService.getTopTenItems(begin, end));
     }
+
+    @GetMapping("/ordersStatistics")
+    @ApiOperation("订单数据统计")
+    public Result getOrderStatistics(
+            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate begin,
+            @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end){
+        return Result.success(statiscticsService.getOrderStatistics(begin, end));
+    }
 }

@@ -55,4 +55,39 @@
         order by number desc
         limit 10;
     </select>
+
+    <resultMap id="resultMap4" type="com.sky.vo.OrderReportItem">
+        <result property="key" column="date" javaType="java.lang.String" />
+        <result property="value" column="cumulative_user_count" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <select id="getOrderStatistic" resultType="com.sky.vo.OrderReportItem">
+        select substring(order_time,1,10) as date,
+               count(*) as orderCount,
+               count(CASE WHEN status = 5 THEN 1 ELSE NULL END) AS  validOrderCount
+        from orders
+        where order_time &gt;= #{begin}  and order_time &lt;= DATE_ADD(#{end}, interval 1 day)
+        group by substring(order_time,1,10);
+    </select>
+
+    <sql id="countOrder">
+        select count(*) from orders
+        <where>
+            <if test = "begin != null">
+                and order_time &gt;= #{begin}
+            </if>
+            <if test = "end != null">
+                and order_time &lt;= DATE_ADD(#{end}, interval 1 day)
+            </if>
+        </where>
+    </sql>
+
+    <select id="countOrdersInTotal" resultType="Integer">
+        <include refid="countOrder"/>
+    </select>
+
+    <select id="countValidOrders" resultType="Integer">
+        <include refid="countOrder"/>
+        and status = 5
+    </select>
 </mapper>

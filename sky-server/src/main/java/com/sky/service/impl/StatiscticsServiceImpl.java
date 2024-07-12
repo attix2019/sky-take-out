@@ -1,26 +1,21 @@
-package com.sky.service;
+package com.sky.service.impl;
 
 import com.sky.handler.MapResultHandler;
 import com.sky.mapper.StatisticsMapper;
+import com.sky.service.StatiscticsService;
 import com.sky.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class StatiscticsServiceImpl implements  StatiscticsService {
+public class StatiscticsServiceImpl implements StatiscticsService {
 
     @Autowired
     StatisticsMapper statisticsMapper;
@@ -92,13 +87,41 @@ public class StatiscticsServiceImpl implements  StatiscticsService {
 
     @Override
     public OrderReportVO getOrderStatistics(LocalDate begin, LocalDate end) {
+        List<String> dateStrList = createDateStringList(begin, end);
+        String dateListStr = String.join(",", dateStrList);
 
-        return OrderReportVO.builder().build();
+        MapResultHandler mapResultHandler = new MapResultHandler();
+        List<OrderReportItem> list = statisticsMapper.getOrderStatistic(begin, end, mapResultHandler);
+
+        List<String> orderCounts = new LinkedList<>();
+        List<String> validOrderCounts = new LinkedList<>();
+        Map<String, OrderReportItem> items  = new HashMap<>();
+        for(OrderReportItem orderReportItem : list){
+            String date = orderReportItem.getDate();
+            items.put(date, orderReportItem);
+        }
+
+        for(String date : dateStrList){
+            OrderReportItem orderReportItem = items.getOrDefault(date, new OrderReportItem(date,0,0) );
+            orderCounts.add(orderReportItem.getOrderCount().toString());
+            validOrderCounts.add(orderReportItem.getValidOrderCount().toString());
+        }
+
+        int orderCount = statisticsMapper.countOrdersInTotal(begin, end);
+        int validOrderCount = statisticsMapper.countValidOrders(begin, end);
+        double ratio =  (orderCount == 0 ? 0 :(double)validOrderCount/orderCount) ;
+        return OrderReportVO.builder()
+                .dateList(dateListStr)
+                .orderCountList(String.join(",", orderCounts))
+                .validOrderCountList(String.join(",", validOrderCounts))
+                .totalOrderCount(orderCount)
+                .validOrderCount(validOrderCount)
+                .orderCompletionRate(ratio)
+                .build();
     }
 
     @Override
     public SalesTop10ReportVO getTopTenItems(LocalDate begin, LocalDate end){
-        MapResultHandler mapResultHandler = new MapResultHandler();
         List<SalesTop10Item> top10Items = statisticsMapper.getTopTenItems(begin, end);
         List<String> names = new LinkedList<>();
         List<String> number = new LinkedList<>();
