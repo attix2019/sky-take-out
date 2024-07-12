@@ -32,11 +32,11 @@ public class DashBoardServiceImpl implements DashBoardService {
     SetmealMapper setmealMapper;
 
     @Override
-    public BusinessDataVO getBusinessDataToday() {
-        Double turnOverToday = orderMapper.getTurnOverToday();
-        int validOrdersCount = statisticsMapper.countValidOrders(LocalDate.now(),LocalDate.now());
-        int ordersCountInTotal = statisticsMapper.countOrdersInTotal(LocalDate.now(),LocalDate.now());
-        int newUserCountToday = userMapper.countNewUserToday();
+    public BusinessDataVO getBusinessDataInRange(LocalDate begin, LocalDate end) {
+        Double turnOverToday = orderMapper.getTurnOverToday(begin, end);
+        int validOrdersCount = statisticsMapper.countValidOrders(begin, end);
+        int ordersCountInTotal = statisticsMapper.countOrdersInTotal(begin, end);
+        int newUserCountToday = userMapper.countNewUserInRange(begin, end);
 
         return BusinessDataVO.builder()
                 .turnover(turnOverToday)

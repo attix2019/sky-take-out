@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/admin/workspace")
 @Slf4j
@@ -22,7 +24,8 @@ public class DashBoardController {
     @GetMapping("/businessData")
     @ApiOperation("查询今日运营数据")
     public Result getBusinessDataToday(){
-        return Result.success(dashBoardService.getBusinessDataToday());
+        return Result.success(dashBoardService.getBusinessDataInRange(
+                LocalDate.now(), LocalDate.now()));
     }
 
     @GetMapping("/overviewOrders")

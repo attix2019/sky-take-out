@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 @RestController
@@ -49,5 +50,11 @@ public class StatisticsController {
             @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate begin,
             @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate end){
         return Result.success(statiscticsService.getOrderStatistics(begin, end));
+    }
+
+    @GetMapping("/export")
+    @ApiOperation("导出过去30天的运营数据")
+    public void exportBusinessDataInLast30days(HttpServletResponse response){
+        statiscticsService.exportBusinessDataInLast30days(response);
     }
 }
