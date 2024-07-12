@@ -45,4 +45,11 @@ public interface OrderMapper {
 
     Integer getOrderCountByStatusAndDate(LocalDate date, List<Integer> statuses);
 
+    @Update("update orders set status = 6 " +
+            "where status=1 and pay_status = 0 and order_time <  date_sub(now(), interval 15 minute)")
+    void cancelOrderIfNotPaidIn15Minutes();
+
+
+    @Update("update orders set status = 5 where status = 4 ")
+    void setDeliveryInProgressOrdersToCompletedAfterCloseUp();
 }
