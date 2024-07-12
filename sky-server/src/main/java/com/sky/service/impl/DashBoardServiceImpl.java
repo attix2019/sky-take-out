@@ -1,12 +1,12 @@
 package com.sky.service.impl;
 
 import com.sky.entity.Orders;
-import com.sky.mapper.OrderMapper;
-import com.sky.mapper.StatisticsMapper;
-import com.sky.mapper.UserMapper;
+import com.sky.mapper.*;
 import com.sky.service.DashBoardService;
 import com.sky.vo.BusinessDataVO;
+import com.sky.vo.DishOverViewVO;
 import com.sky.vo.OrderOverViewVO;
+import com.sky.vo.SetmealOverViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +24,12 @@ public class DashBoardServiceImpl implements DashBoardService {
 
     @Autowired
     StatisticsMapper statisticsMapper;
+
+    @Autowired
+    DishMapper dishMapper;
+
+    @Autowired
+    SetmealMapper setmealMapper;
 
     @Override
     public BusinessDataVO getBusinessDataToday() {
@@ -66,5 +72,19 @@ public class DashBoardServiceImpl implements DashBoardService {
                 .waitingOrders(ordersToBeConfirmedNumber)
                 .deliveredOrders(ordersToDeliverNumber)
                 .build();
+    }
+
+    @Override
+    public DishOverViewVO getDishOverview() {
+        int onSale = dishMapper.getDishNumberByStatus(1);
+        int outOfSale = dishMapper.getDishNumberByStatus(0);
+        return DishOverViewVO.builder().sold(onSale).discontinued(outOfSale).build();
+    }
+
+    @Override
+    public SetmealOverViewVO getSetmealOverview() {
+        int onSale = setmealMapper.getSetmealNumberByStatus(1);
+        int outOfSale = setmealMapper.getSetmealNumberByStatus(0);
+        return SetmealOverViewVO.builder().sold(onSale).discontinued(outOfSale).build();
     }
 }

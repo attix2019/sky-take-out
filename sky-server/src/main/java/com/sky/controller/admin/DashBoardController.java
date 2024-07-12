@@ -30,4 +30,16 @@ public class DashBoardController {
     public Result getOrderOverview(){
         return Result.success(dashBoardService.getOrderOverview());
     }
+
+    @GetMapping("/overviewDishes")
+    @ApiOperation("查询菜品总览")
+    public Result getDishOverview(){
+        return Result.success(dashBoardService.getDishOverview());
+    }
+
+    @GetMapping("/overviewSetmeals")
+    @ApiOperation("查询套餐总览")
+    public Result getSetmealOverview(){
+        return Result.success(dashBoardService.getSetmealOverview());
+    }
 }

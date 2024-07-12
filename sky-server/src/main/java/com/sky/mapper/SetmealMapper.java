@@ -42,4 +42,7 @@ public interface SetmealMapper {
 
     @Select("select * from setmeal where category_id = #{categoryId} and status = 1")
     List<Setmeal> findActiveSetmealsByCategoryId(Integer categoryId);
+
+    @Select("select ifnull(count(*),0) from setmeal where status = #{status} ")
+    Integer getSetmealNumberByStatus(int status);
 }

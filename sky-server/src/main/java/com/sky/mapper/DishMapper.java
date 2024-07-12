@@ -39,4 +39,7 @@ public interface DishMapper {
     void updateDish(Dish dish);
 
     List<Dish> findDishesByCategoryId(int id);
+
+    @Select("select ifnull(count(*),0) from dish where status = #{status} ")
+    Integer getDishNumberByStatus(int status);
 }
